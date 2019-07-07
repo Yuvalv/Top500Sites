@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+		<script
+  			src="https://code.jquery.com/jquery-3.4.1.min.js"
+  			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  			crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<div class="chart-container" style="height:600px; width:1000px">
+    		<canvas id="myChart"></canvas>
+		</div>
+		<h1>Refresh result every 7 sec</h1>
+		<script>
+    var labels = [];
+    var dataArray = [];
+    $.getJSON('http://localhost:5000/', function(data) {
+		$.each( data, function( key, val ) {
+    		labels.push(val.site_name);
+    		dataArray.push(val.latency);
+  		});
+
+  		var ctx = document.getElementById('myChart');
+		var myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: labels,
+				datasets: [{
+					label: 'Ping latency',
+					data: dataArray,
+					backgroundColor: [
+						'rgba(255, 99, 132, 0.2)',
+						'rgba(54, 162, 235, 0.2)',
+						'rgba(255, 206, 86, 0.2)',
+						'rgba(75, 192, 192, 0.2)',
+						'rgba(153, 102, 255, 0.2)',
+						'rgba(255, 159, 64, 0.2)',
+						'rgba(145, 255, 86, 0.2)',
+						'rgba(175, 92, 192, 0.2)',
+						'rgba(253, 132, 255, 0.2)',
+						'rgba(205, 19, 64, 0.2)'
+					],
+					borderColor: [
+						'rgba(255, 99, 132, 1)',
+						'rgba(54, 162, 235, 1)',
+						'rgba(255, 206, 86, 1)',
+						'rgba(75, 192, 192, 1)',
+						'rgba(153, 102, 255, 1)',
+						'rgba(255, 159, 64, 1)',
+						'rgba(255, 206, 86, 1)',
+						'rgba(75, 192, 192, 1)',
+						'rgba(153, 102, 255, 1)',
+						'rgba(255, 159, 64, 1)'
+					],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				}
+			}
+		});
+
+		setInterval(function(){
+			var da = []
+			$.getJSON('http://localhost:5000/', function(data) {
+				$.each( data, function( key, val ) {
+					da.push(val.latency);
+				});
+				myChart.data.datasets[0].data = da;
+				myChart.update();
+			});
+		}, 7000);
+
+    });
+
+    function update(){
+
+    }
+</script>
+	</body>
+</html>
