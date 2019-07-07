@@ -18,6 +18,7 @@ So limit by the code to 10 sites (details in  get_data_from_site_and_store metho
 but if you were looking at the console you will see exception - I need to fix it (to hide the exception)
 
 ## Installation:
+i use python 3.6.8
 all the server is under the folder Top500Sites
 you need to install all the module from the "requirements.txt" file
 You need to run app.py with flask:
